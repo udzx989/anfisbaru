@@ -60,7 +60,7 @@ class ANFIS:
         convergence = False
         epoch = 1
 
-        while (epoch < epochs) and (convergence is not True):
+        while (epoch < epochs) and (not convergence):
 
             #layer four: forward pass
             [layerFour, wSum, w] = forwardHalfPass(self, self.X)
@@ -77,11 +77,11 @@ class ANFIS:
             self.errors = np.append(self.errors,error)
 
             if len(self.errors) != 0:
-                if self.errors[len(self.errors)-1] < tolerance:
+                if self.errors[-1] < tolerance:
                     convergence = True
 
             # back propagation
-            if convergence is not True:
+            if not convergence:
                 cols = range(len(self.X[0,:]))
                 dE_dAlpha = list(backprop(self, colX, cols, wSum, w, layerFive) for colX in range(self.X.shape[1]))
 
