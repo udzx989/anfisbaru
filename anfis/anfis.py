@@ -6,8 +6,8 @@ Created on Thu Apr 03 07:30:34 2014
 """
 import itertools
 import numpy as np
-from membership import mfDerivs
 import copy
+from skfuzzy import partial_dmf
 
 class ANFIS:
     """Class to implement an Adaptive Network Fuzzy Inference System: ANFIS"
@@ -225,8 +225,9 @@ def backprop(ANFISObj, columnX, columns, theWSum, theW, theLayerFive):
 
                     rulesWithAlpha = np.array(np.where(ANFISObj.rules[:,columnX]==MF))[0]
                     adjCols = np.delete(columns,columnX)
-
-                    senSit = mfDerivs.partial_dMF(ANFISObj.X[rowX,columnX],ANFISObj.memFuncs[columnX][MF],alpha)
+                    mf_name = ANFISObj.memFuncs[columnX][MF][0]
+                    mf_parameters = ANFISObj.memFuncs[columnX][MF][1]
+                    senSit = partial_dmf(ANFISObj.X[rowX,columnX], mf_name, mf_parameters, alpha)
                     # produces d_ruleOutput/d_parameterWithinMF
                     dW_dAplha = senSit * np.array([np.prod([ANFISObj.memClass.evaluateMF(tmpRow)[c][ANFISObj.rules[r][c]] for c in adjCols]) for r in rulesWithAlpha])
 

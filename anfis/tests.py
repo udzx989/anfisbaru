@@ -1,5 +1,4 @@
 import anfis
-import membership.mfDerivs
 import membership.membershipfunction
 import numpy
 
